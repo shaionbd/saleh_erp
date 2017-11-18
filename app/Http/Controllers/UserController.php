@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Task;
 use App\ItemSubmission;
@@ -88,7 +89,30 @@ class UserController extends Controller
     }
 
     public function getProfile(){
-        echo "ok";
+
+        $data['title'] = "Profile";
+        $data['active'] = "profile";
+
+        $user_id = Auth::user()->id;
+        $data['profile'] = User::where('id', $user_id)->firstOrFail();
+
+        return view('profile')->with($data);
+    }
+
+    public function updateProfile(Request $request){
+
+        $user_id = $request['user_id'];
+        $update_profile = User::find($user_id);
+
+        $update_profile->name = $request['name'];
+        $update_profile->email = $request['email'];
+        $update_profile->phone = $request['phone'];
+        $update_profile->website = $request['website'];
+        $update_profile->about_me = $request['about_me'];
+
+        $update_profile->save();
+
+       return redirect()->route('user.profile');
     }
     //======================= /for both manager and writter ======================//
 
@@ -134,8 +158,48 @@ class UserController extends Controller
 
     }
 
-    public function postOnGoingTaskSubmit(Request $request){    
+    public function postTaskRivisionStatusChange(Request $request){
+        $task_id = $request['task_id'];
+        $user_id = $request['user_id'];
+        
+        $task = Task::where('id', $task_id)
+                    ->where('writter_id', $user_id)
+                    ->first();
+        $task->process_status = '1';
+        $task->on_revision = '1';
+        $task->save();
 
+        return redirect()->route('user.tasks');
+
+    }
+
+    public function postOnGoingTaskSubmit(Request $request){ 
+        $task_id = $request['task_id'];
+        $user_id = $request['user_id'];
+
+        if($request->hasFile('submitted_file')){
+            $filename = time()."_".$request->submitted_file->getClientOriginalName();
+            $request->submitted_file->storeAs('public/tasks', $filename);
+
+            $task = Task::where('id', $task_id)
+                    ->where('writter_id', $user_id)
+                    ->first();
+            $task->process_status = '4';
+            $task->save();
+
+            $itemSubmission = new ItemSubmission();
+            $itemSubmission->writter_id = $user_id;
+            $itemSubmission->task_id = $task_id;
+            $itemSubmission->file = $filename;
+            try {
+                $status = ItemSubmission::where('task_id', $task_id)->orderBy('id', 'desc')->first();
+                $itemSubmission->re_submission_date = $status->re_submission_date;
+            }catch(Exception $e){}
+
+            $itemSubmission->save();
+
+        }
+        return redirect()->route('user.tasks');
     }
     //============================= /for writter ==============================//
 

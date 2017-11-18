@@ -33,6 +33,10 @@ Route::post('/update/availability', [											###
 Route::get('/profile', [														###
 	'as'	=> 'user.profile',													###
 	'uses'	=> 'UserController@getProfile'										###
+]);	
+Route::post('update/profile', [													###
+	'as'	=> 'user.updateProfile',											###
+	'uses'	=> 'UserController@updateProfile'									###
 ]);																				###
 //=========================== /for both weitter and manager=======================//
 
@@ -56,6 +60,11 @@ Route::get('/writter/payments', [												###
 Route::post('/writter/task/status/change', [									###
 	'as'	=> 'user.pending_status_change',									###
 	'uses'	=> 'UserController@postTaskStatusChange'							###
+]);
+
+Route::post('/writter/revision/task/status/change', [							###
+	'as'	=> 'user.revision_pending_status_change',							###
+	'uses'	=> 'UserController@postTaskRivisionStatusChange'					###
 ]);	
 
 Route::post('/writter/task/submit', [											###

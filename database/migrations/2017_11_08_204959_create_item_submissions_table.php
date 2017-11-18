@@ -19,7 +19,11 @@ class CreateItemSubmissionsTable extends Migration
             $table->integer('task_id')->references('id')->on('tasks');
             $table->integer('manager_rivision')->default(0);
             $table->integer('admin_rivision');
+            $table->text('admin_revision_description');
+            $table->text('manager_revision_description');
             $table->string('submission_date');
+            $table->string('re_submission_date');
+            $table->integer('is_rivision_onGoing')->default(0);
             $table->integer('is_accepted')->default(0);
             $table->string('file');
             $table->timestamps();

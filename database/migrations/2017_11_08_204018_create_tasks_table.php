@@ -24,6 +24,7 @@ class CreateTasksTable extends Migration
             $table->string('chunk');
             $table->integer('process_status')->default('0');
             $table->integer('is_accepted')->default('0');
+            $table->integer('on_revision')->default('0');
             $table->string('submission_date');
             $table->timestamps();
         });
