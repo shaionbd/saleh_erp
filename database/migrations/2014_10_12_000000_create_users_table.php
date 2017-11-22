@@ -21,7 +21,9 @@ class CreateUsersTable extends Migration
             $table->string('designation')->default('null');
             $table->string('about_me')->default('null');
             $table->string('website')->default('null');
+            $table->string('skills')->default('null');
             $table->string('experience')->default('null');
+            $table->string('address')->default('null');
             $table->string('password');
             $table->integer('role')->default('4'); /* Role Of Client */
             $table->string('is_available')->default('1');
@@ -31,7 +33,8 @@ class CreateUsersTable extends Migration
             $table->string('google_plus_link')->default('null');
             $table->string('linkedin_link')->default('null');
             $table->string('twitter_link')->default('null');
-            $table->string('others_link')->default('null');
+            $table->string('github_link')->default('null');
+            $table->string('image')->default('default.png');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -1,0 +1,1 @@
+SELECT COUNT(id) AS task_complete, EXTRACT(MONTH FROM submission_date) as month, EXTRACT(YEAR FROM submission_date) as year FROM `tasks` WHERE is_accepted=1 AND process_status=4 GROUP BY (EXTRACT(MONTH FROM submission_date))

@@ -38,6 +38,11 @@ Route::post('update/profile', [													###
 	'as'	=> 'user.updateProfile',											###
 	'uses'	=> 'UserController@updateProfile'									###
 ]);																				###
+
+Route::post('request/payment', [												###
+	'as'	=> 'user.request_payemt',											###
+	'uses'	=> 'UserController@requestPayment'									###
+]);																				###
 //=========================== /for both weitter and manager=======================//
 
 

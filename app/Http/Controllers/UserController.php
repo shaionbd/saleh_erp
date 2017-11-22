@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Task;
 use App\ItemSubmission;
+use App\Payment;
+use App\Withdrawal;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -109,10 +112,82 @@ class UserController extends Controller
         $update_profile->phone = $request['phone'];
         $update_profile->website = $request['website'];
         $update_profile->about_me = $request['about_me'];
+        $update_profile->skills = $request['skills'];
+        $update_profile->experience = $request['experience'];
+        $update_profile->address = $request['address'];
+        $update_profile->twitter_link = $request['twitter_link'];
+        $update_profile->fb_link = $request['fb_link'];
+        $update_profile->google_plus_link = $request['google_plus_link'];
+        $update_profile->linkedin_link = $request['linkedin_link'];
+        $update_profile->github_link = $request['github_link'];
+
+        if($request->hasFile('image')){
+            if($update_profile->image != 'default.png'){
+                Storage::delete('public/profile/'.$update_profile->image);
+            }
+            $filename = time()."_".$request->image->getClientOriginalName();
+            $request->image->storeAs('public/profile', $filename);
+            $update_profile->image = $filename;
+        }
 
         $update_profile->save();
 
        return redirect()->route('user.profile');
+    }
+
+    public function getPayments(){
+        $data['title'] = "Payments";
+        $data['active'] = "payments";
+
+        if(Auth::user()->role == 3){
+            $data['net'] = Payment::where('writter_id', Auth::user()->id)
+                                ->sum('writter_share');
+            $data['withdraw'] = Withdrawal::where('user_id', Auth::user()->id)
+                                ->where('request_status', 1)
+                                ->sum('amount');
+
+            $data['payments'] = Payment::where('writter_id', Auth::user()->id)
+                                        ->orderBy('id', 'desc')
+                                        ->get();
+            $data['withdrawals'] = Withdrawal::where('user_id', Auth::user()->id)
+                                                ->orderBy('id', 'desc')
+                                                ->get();
+
+            return view('payment')->with($data);
+        }else if(Auth::user()->role == 2){
+            $data['net'] = Payment::where('manager_id', Auth::user()->id)
+                                ->sum('manager_share');
+            $data['withdraw'] = Withdrawal::where('user_id', Auth::user()->id)
+                                ->where('request_status', 1)
+                                ->sum('amount');
+
+            $data['payments'] = Payment::where('writter_id', Auth::user()->id)
+                                        ->orderBy('id', 'desc')
+                                        ->get();
+            $data['withdrawals'] = Withdrawal::where('user_id', Auth::user()->id)
+                                            ->orderBy('id', 'desc')
+                                            ->get();
+
+            return view('payment')->with($data);
+        }
+    }
+
+    public function requestPayment(Request $request){
+        $request_type = $request['request_type'];
+        $account_no = $request['account_no'];
+        $amount = $request['amount'];
+        $user_id = Auth::user()->id;
+
+        $withdrawal = new Withdrawal();
+        $withdrawal->request_type = $request_type;
+        $withdrawal->account_no = $account_no;
+        $withdrawal->amount = $amount;
+        $withdrawal->user_id = $user_id;
+
+        $withdrawal->save();
+
+        return redirect()->route('user.payment');
+
     }
     //======================= /for both manager and writter ======================//
 
@@ -129,10 +204,6 @@ class UserController extends Controller
     }
 
     public function getArchives(){
-
-    }
-
-    public function getPayments(){
 
     }
 
