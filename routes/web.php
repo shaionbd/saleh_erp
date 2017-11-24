@@ -52,9 +52,14 @@ Route::get('/writter/tasks', [													###
 	'uses'	=> 'UserController@getTasks'										###
 ]);																				###
 
-Route::get('/writter/archives', [												###
+Route::get('/writter/archives/{type}/{month?}/{year?}', [						###
 	'as'	=> 'user.archive',													###
 	'uses'	=> 'UserController@getArchives'										###
+]);																				###
+
+Route::get('/writter/archive/details/{id}', [									###
+	'as'	=> 'user.archiveDetails',											###
+	'uses'	=> 'UserController@getArchiveDetails'								###
 ]);																				###
 
 Route::get('/writter/payments', [												###
