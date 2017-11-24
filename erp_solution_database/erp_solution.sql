@@ -1,15 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.6.5.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Nov 22, 2017 at 09:43 PM
--- Server version: 10.1.22-MariaDB
--- PHP Version: 7.0.18
+-- Host: 127.0.0.1
+-- Generation Time: Nov 24, 2017 at 09:02 PM
+-- Server version: 10.1.21-MariaDB
+-- PHP Version: 7.0.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -146,7 +144,8 @@ CREATE TABLE `payments` (
 
 INSERT INTO `payments` (`id`, `task_id`, `writter_id`, `manager_id`, `price`, `writter_share`, `manager_share`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 3, '100', '60', '10', '2017-11-20 18:00:00', '2017-11-20 18:00:00'),
-(2, 2, 1, 3, '80', '48', '8', '2017-11-20 18:00:00', '2017-11-20 18:00:00');
+(2, 2, 1, 3, '80', '48', '8', '2017-11-20 18:00:00', '2017-11-20 18:00:00'),
+(3, 3, 1, 3, '120', '48', '8', '2017-11-20 18:00:00', '2017-11-20 18:00:00');
 
 -- --------------------------------------------------------
 
@@ -158,15 +157,14 @@ CREATE TABLE `tasks` (
   `id` int(10) UNSIGNED NOT NULL,
   `item_id` int(11) NOT NULL,
   `writter_id` int(11) NOT NULL,
-  `description` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `start_date` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `end_date` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
   `word_counts` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `chunk` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `process_status` int(11) NOT NULL DEFAULT '0',
   `is_accepted` int(11) NOT NULL DEFAULT '0',
-  `on_revision` int(11) NOT NULL DEFAULT '0',
-  `submission_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `submission_date` date NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -175,12 +173,10 @@ CREATE TABLE `tasks` (
 -- Dumping data for table `tasks`
 --
 
-INSERT INTO `tasks` (`id`, `item_id`, `writter_id`, `description`, `start_date`, `end_date`, `word_counts`, `chunk`, `process_status`, `is_accepted`, `on_revision`, `submission_date`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'u have 2 complete this alone', '17-11-2017', '22-11-2017', '10000', '0', 4, 1, 1, '2017-11-20 18:17:44', NULL, '2017-11-20 12:17:28'),
-(2, 2, 1, 'u have 2 complete this alonemndcsm', '17-11-2017', '22-11-2017', '8000', '0', 4, 1, 0, '2017-11-19 18:17:48', NULL, '2017-11-17 04:45:32'),
-(3, 2, 1, 'u have 2 complete this alonemndcsm', '17-11-2017', '22-11-2017', '8000', '0', 4, 1, 0, '2017-10-10 18:17:48', NULL, '2017-11-17 04:45:32'),
-(4, 2, 1, 'u have 2 complete this alonemndcsm', '17-11-2017', '22-11-2017', '8000', '0', 4, 1, 0, '2017-10-01 18:17:48', NULL, '2017-11-17 04:45:32'),
-(5, 2, 1, 'u have 2 complete this alonemndcsm', '17-11-2017', '22-11-2017', '8000', '0', 4, 1, 0, '2017-09-05 18:17:48', NULL, '2017-11-17 04:45:32');
+INSERT INTO `tasks` (`id`, `item_id`, `writter_id`, `description`, `start_date`, `end_date`, `word_counts`, `chunk`, `process_status`, `is_accepted`, `submission_date`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'u have 2 complete this alone', '2017-10-03', '2017-10-25', '10000', '0', 4, 0, '2017-11-17', NULL, '2017-11-17 04:44:51'),
+(2, 2, 1, 'u have 2 complete this alonemndcsm', '2017-10-18', '2017-11-15', '8000', '0', 4, 1, '2017-11-17', NULL, '2017-11-17 04:45:32'),
+(3, 2, 1, 'u have 2 complete this alonemndcsm', '2017-11-05', '2017-11-22', '8000', '0', 4, 1, '2017-11-17', NULL, '2017-11-17 04:45:32');
 
 -- --------------------------------------------------------
 
@@ -220,7 +216,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `phone`, `designation`, `about_me`, `website`, `skills`, `experience`, `address`, `password`, `role`, `is_available`, `current_status`, `supervisor`, `fb_link`, `google_plus_link`, `linkedin_link`, `twitter_link`, `github_link`, `image`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Test', 'test@gmail.com', '01671234567', 'Content Writter', 'Hey - I am Test, a 22 years old Content Writter from Bangladesh. I\'m now studying in CUET at Mechanical Engineering. Good skill in English.', 'http://www.therankwizard.com', 'Content Writter,SEO,Technical Writter', '1 year', 'Dhaka, Bangladesh', '$2y$10$TfPhyrJM8I3t5OOW3wTXKucTfvvGuK4poRKe2dFZjmRuUZZxLxGeG', 3, '1', NULL, '3', 'https://www.facebook.com/TVirus.me', NULL, NULL, 'https://www.twitter.com/ShaionShaion', 'https://github.com/shaionbd', '1511197392_website.jpg', 'cDrQ5fLrVTgCXwutY0BLDEc2JvXiTZjI9jOR5rJ60BYNEaFrcDZAjjS4qqjs', '2017-11-10 01:38:05', '2017-11-20 11:03:42'),
+(1, 'Test', 'test@gmail.com', '01671234567', 'Content Writter', 'Hey - I am Test, a 22 years old Content Writter from Bangladesh. I\'m now studying in CUET at Mechanical Engineering. Good skill in English.', 'http://www.therankwizard.com', 'Content Writter,SEO,Technical Writter', '1 year', 'Dhaka, Bangladesh', '$2y$10$TfPhyrJM8I3t5OOW3wTXKucTfvvGuK4poRKe2dFZjmRuUZZxLxGeG', 3, '1', NULL, '3', 'https://www.facebook.com/TVirus.me', NULL, NULL, 'https://www.twitter.com/ShaionShaion', 'https://github.com/shaionbd', '1511197392_website.jpg', '5lQRGZ7j0N0Q7uHP5dbB2RZiQf9GAt1VXFGKJdOovB9k4v5HzFPKbo95IhrV', '2017-11-10 01:38:05', '2017-11-22 15:21:37'),
 (2, 'Admin', 'admin@gmail.com', NULL, 'CEO & Founder', NULL, NULL, NULL, NULL, NULL, '$2y$10$TfPhyrJM8I3t5OOW3wTXKucTfvvGuK4poRKe2dFZjmRuUZZxLxGeG', 1, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.png', 'WyuurCjKS21iQ2Jy8ygxfJzR2mffhjMIXOQH42RViXOBqED4FIHISzENiUo3', '2017-11-10 01:38:05', '2017-11-10 01:38:05'),
 (3, 'Test Manager', 'manager@gmail.com', NULL, 'Manager', NULL, NULL, NULL, NULL, NULL, '$2y$10$TfPhyrJM8I3t5OOW3wTXKucTfvvGuK4poRKe2dFZjmRuUZZxLxGeG', 2, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.png', NULL, '2017-11-10 01:38:05', '2017-11-10 01:38:05');
 
@@ -324,12 +320,12 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `tasks`
 --
 ALTER TABLE `tasks`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `users`
 --
@@ -339,8 +335,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `withdrawals`
 --
 ALTER TABLE `withdrawals`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;COMMIT;
-
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
