@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Task;
 use App\ItemSubmission;
@@ -203,8 +204,68 @@ class UserController extends Controller
         return view('writter.tasks')->with($data);
     }
 
-    public function getArchives(){
+    public function getArchives($type, $month='', $year='')
+    {
+        if($type == 'current')
+        {
+            $month = date('m');
+            $year = date('Y');  
+        }
+        else if($type == 'prev')
+        {
+            if($month > 0)
+            {
+                $month -- ;
+                if ($month == 0) 
+                {
+                    $year--;
+                    $month = 12;
+                }
+            }
+        }
+        else
+        {
+            if($month <= 12)
+            {
+                $month ++ ;
+                if ($month == 13) 
+                {
+                    $year++;
+                    $month = 1;
+                }
+            }  
+        }
 
+        $archives = Task::select('id',
+                            DB::raw("SUM(MONTH(start_date) = $month AND YEAR(start_date) = $year AND process_status = 4 AND is_accepted = 1) AS assigned_task"),
+                            DB::raw("SUM(MONTH(end_date) = $month AND YEAR(end_date) = $year AND process_status = 4 AND is_accepted = 1) AS delivered_task"),
+                            DB::raw("(SELECT SUM(payments.price) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.submission_date) = $month AND YEAR(tasks.submission_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_earning")
+                        )->get();
+
+        //dd($archives);
+
+        $data = [
+
+            'title' => "Archives",
+            'active' => "archives",
+            'type' => $type,
+            'month' => $month,
+            'year' => $year,
+            'archives' => $archives
+
+        ];
+
+        return view('writter.archive')->with($data);
+    }
+
+    public function getArchiveDetails($id)
+    {
+        $data['title'] = "Task Details";
+        $data['active'] = "tasks";
+
+         dd($id);
+
+        return view('writter.archive_details')->with($data);
     }
 
     // post form
