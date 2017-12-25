@@ -31,7 +31,7 @@
     @if(Auth::user()->role == 3)
       <!-- user sidebar -->
       <li @if($active == 'tasks') class="active" @endif ><a href="{{ route('user.tasks') }}"><i class="fa fa-tasks"></i> <span>Tasks</span></a></li>
-      <li @if($active == 'archive') class="active" @endif ><a href="{{ url('/writter/archives/current') }}"><i class="fa fa-archive"></i> <span>Archive</span></a></li>
+      <li @if($active == 'archives') class="active" @endif ><a href="{{ url('/writter/archives/current') }}"><i class="fa fa-archive"></i> <span>Archive</span></a></li>
       <li @if($active == 'payments') class="active" @endif><a href="{{ route('user.payment') }}"><i class="fa fa-money"></i> <span>Payment</span></a></li>
       <li @if($active == 'profile') class="active" @endif><a href="{{ route('user.profile') }}"><i class="fa fa-user-o"></i> <span>Profile</span></a></li>
     @elseif(Auth::user()->role == 2)

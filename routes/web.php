@@ -57,7 +57,7 @@ Route::get('/writter/archives/{type}/{month?}/{year?}', [						###
 	'uses'	=> 'UserController@getArchives'										###
 ]);																				###
 
-Route::get('/writter/archive/details/{id}', [									###
+Route::get('/writter/archive/details/{month_year}', [							###
 	'as'	=> 'user.archiveDetails',											###
 	'uses'	=> 'UserController@getArchiveDetails'								###
 ]);																				###

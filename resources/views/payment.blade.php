@@ -24,13 +24,18 @@
                         
                     <table class="table table-bordered">
                         <thead>
-                            <th class="text-center">Net Earning(&#2547;)</th>
+                            <th class="text-center">Total Earning(&#2547)</th>
+                            <th class="text-center">Penalty amount(&#2547;)</th>
+                            <th class="text-center">Earning(&#2547)</th>
                             <th class="text-center">Total Withdrawing(&#2547;)</th>
                             <th class="text-center">Current Amount(&#2547;)</th>
                         </thead>
                         <tbody>
                             <tr class="text-center">
                                 <td>{{ number_format($net,2) }}</td>
+                                <td>{{ number_format($penalty,2) }}</td>
+                                <?php $total = $net-$penalty; ?>
+                                <td>{{ $total }}</td>
                                 <td>{{ number_format($withdraw,2) }}</td>
                                 <td>{{ number_format($net-$withdraw,2) }}</td>
                             </tr>
@@ -109,7 +114,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="amount">Amount</label>
-                                <input type="number" class="form-control" id="amount" name="amount" min="50" max="{{ $net-$withdraw }}" required>
+                                <input type="number" class="form-control" id="amount" name="amount" min="50" max="{{ $total-$withdraw }}" required>
                             </div>
                             @if($net-$withdraw < 50)
                                 <h4 class="text-danger">*you have not enough money for request</h4>

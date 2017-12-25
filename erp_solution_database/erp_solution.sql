@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 24, 2017 at 09:02 PM
--- Server version: 10.1.21-MariaDB
--- PHP Version: 7.0.15
+-- Host: localhost
+-- Generation Time: Dec 25, 2017 at 07:34 PM
+-- Server version: 10.1.22-MariaDB
+-- PHP Version: 7.0.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -29,12 +31,12 @@ SET time_zone = "+00:00";
 CREATE TABLE `items` (
   `id` int(10) UNSIGNED NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `client_id` int(11) DEFAULT NULL,
+  `project_id` int(11) NOT NULL,
+  `manager_id` int(11) DEFAULT NULL,
   `description` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `word_counts` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `chunk` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `start_date` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `end_date` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `start_date` timestamp NULL DEFAULT NULL,
+  `end_date` timestamp NULL DEFAULT NULL,
   `price` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `process_status` int(11) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -45,9 +47,10 @@ CREATE TABLE `items` (
 -- Dumping data for table `items`
 --
 
-INSERT INTO `items` (`id`, `name`, `client_id`, `description`, `word_counts`, `chunk`, `start_date`, `end_date`, `price`, `process_status`, `created_at`, `updated_at`) VALUES
-(1, 'demo for demo.com', 0, '10000 words', '10000', '0', '14-11-2017', '22-11-2017', '100', 0, '2017-11-10 18:00:00', '2017-11-10 18:00:00'),
-(2, 'demo2 for demo.com', 0, '8000 words', '8000', '0', '14-11-2017', '22-11-2017', '80', 0, '2017-11-10 18:00:00', '2017-11-10 18:00:00');
+INSERT INTO `items` (`id`, `name`, `project_id`, `manager_id`, `description`, `word_counts`, `start_date`, `end_date`, `price`, `process_status`, `created_at`, `updated_at`) VALUES
+(1, 'About Section Of Demo', 1, 3, 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less', '5000', '2017-12-25 18:00:00', '2017-12-27 18:00:00', '5000', 0, '2017-12-24 18:00:00', '2017-12-24 18:00:00'),
+(2, 'Product Section Of Demo', 1, 3, 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less', '5000', '2017-12-25 18:00:00', '2017-12-27 18:00:00', '5000', 0, '2017-12-24 18:00:00', '2017-12-24 18:00:00'),
+(3, 'Plan Section Of Demo', 1, 3, 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less', '5000', '2017-12-25 18:00:00', '2017-12-27 18:00:00', '5000', 0, '2017-12-24 18:00:00', '2017-12-24 18:00:00');
 
 -- --------------------------------------------------------
 
@@ -131,21 +134,40 @@ CREATE TABLE `payments` (
   `task_id` int(11) NOT NULL,
   `writter_id` int(11) NOT NULL,
   `manager_id` int(11) DEFAULT NULL,
-  `price` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `writter_share` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `manager_share` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `price` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0.00',
+  `writter_share` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0.00',
+  `manager_share` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0.00',
+  `writter_penalty` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT '0',
+  `manager_penalty` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `payments`
+-- Table structure for table `projects`
 --
 
-INSERT INTO `payments` (`id`, `task_id`, `writter_id`, `manager_id`, `price`, `writter_share`, `manager_share`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 3, '100', '60', '10', '2017-11-20 18:00:00', '2017-11-20 18:00:00'),
-(2, 2, 1, 3, '80', '48', '8', '2017-11-20 18:00:00', '2017-11-20 18:00:00'),
-(3, 3, 1, 3, '120', '48', '8', '2017-11-20 18:00:00', '2017-11-20 18:00:00');
+CREATE TABLE `projects` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `client_id` int(11) DEFAULT NULL,
+  `description` text NOT NULL,
+  `word_counts` int(11) NOT NULL,
+  `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `end_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `price` varchar(10) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `projects`
+--
+
+INSERT INTO `projects` (`id`, `name`, `client_id`, `description`, `word_counts`, `start_date`, `end_date`, `price`, `created_at`, `updated_at`) VALUES
+(1, 'Demo Project', NULL, 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.', 15000, '2017-12-25 17:15:41', '2017-12-31 14:00:00', '15000', '2017-12-25 17:15:00', '2017-12-25 17:15:00');
 
 -- --------------------------------------------------------
 
@@ -157,14 +179,16 @@ CREATE TABLE `tasks` (
   `id` int(10) UNSIGNED NOT NULL,
   `item_id` int(11) NOT NULL,
   `writter_id` int(11) NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
+  `description` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `start_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `end_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `word_counts` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `chunk` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `process_status` int(11) NOT NULL DEFAULT '0',
   `is_accepted` int(11) NOT NULL DEFAULT '0',
-  `submission_date` date NOT NULL,
+  `on_revision` int(11) NOT NULL DEFAULT '0',
+  `extend_date` timestamp NULL DEFAULT NULL,
+  `submission_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -173,10 +197,10 @@ CREATE TABLE `tasks` (
 -- Dumping data for table `tasks`
 --
 
-INSERT INTO `tasks` (`id`, `item_id`, `writter_id`, `description`, `start_date`, `end_date`, `word_counts`, `chunk`, `process_status`, `is_accepted`, `submission_date`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'u have 2 complete this alone', '2017-10-03', '2017-10-25', '10000', '0', 4, 0, '2017-11-17', NULL, '2017-11-17 04:44:51'),
-(2, 2, 1, 'u have 2 complete this alonemndcsm', '2017-10-18', '2017-11-15', '8000', '0', 4, 1, '2017-11-17', NULL, '2017-11-17 04:45:32'),
-(3, 2, 1, 'u have 2 complete this alonemndcsm', '2017-11-05', '2017-11-22', '8000', '0', 4, 1, '2017-11-17', NULL, '2017-11-17 04:45:32');
+INSERT INTO `tasks` (`id`, `item_id`, `writter_id`, `description`, `start_date`, `end_date`, `word_counts`, `chunk`, `process_status`, `is_accepted`, `on_revision`, `extend_date`, `submission_date`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', '2017-12-25 18:00:00', '2017-12-27 18:00:00', '5000', '0', 0, 0, 0, NULL, '2017-12-25 17:29:11', '2017-12-24 18:00:00', '2017-12-24 18:00:00'),
+(2, 2, 4, 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', '2017-12-25 17:30:42', '2017-12-27 18:00:00', '5000', '0', 0, 0, 0, NULL, '2017-12-25 17:30:42', '2017-12-24 18:00:00', '2017-12-24 18:00:00'),
+(3, 3, 5, 'The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English.', '2017-12-25 17:30:42', '2017-12-27 18:00:00', '5000', '0', 0, 0, 0, NULL, '2017-12-25 17:30:42', '2017-12-24 18:00:00', '2017-12-24 18:00:00');
 
 -- --------------------------------------------------------
 
@@ -216,9 +240,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `phone`, `designation`, `about_me`, `website`, `skills`, `experience`, `address`, `password`, `role`, `is_available`, `current_status`, `supervisor`, `fb_link`, `google_plus_link`, `linkedin_link`, `twitter_link`, `github_link`, `image`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Test', 'test@gmail.com', '01671234567', 'Content Writter', 'Hey - I am Test, a 22 years old Content Writter from Bangladesh. I\'m now studying in CUET at Mechanical Engineering. Good skill in English.', 'http://www.therankwizard.com', 'Content Writter,SEO,Technical Writter', '1 year', 'Dhaka, Bangladesh', '$2y$10$TfPhyrJM8I3t5OOW3wTXKucTfvvGuK4poRKe2dFZjmRuUZZxLxGeG', 3, '1', NULL, '3', 'https://www.facebook.com/TVirus.me', NULL, NULL, 'https://www.twitter.com/ShaionShaion', 'https://github.com/shaionbd', '1511197392_website.jpg', '5lQRGZ7j0N0Q7uHP5dbB2RZiQf9GAt1VXFGKJdOovB9k4v5HzFPKbo95IhrV', '2017-11-10 01:38:05', '2017-11-22 15:21:37'),
+(1, 'Test', 'test@gmail.com', '01671234567', 'Content Writter', 'Hey - I am Test, a 22 years old Content Writter from Bangladesh. I\'m now studying in CUET at Mechanical Engineering. Good skill in English.', 'http://www.therankwizard.com', 'Content Writter,SEO,Technical Writter', '1 year', 'Dhaka, Bangladesh', '$2y$10$TfPhyrJM8I3t5OOW3wTXKucTfvvGuK4poRKe2dFZjmRuUZZxLxGeG', 3, '1', NULL, '3', 'https://www.facebook.com/TVirus.me', NULL, NULL, 'https://www.twitter.com/ShaionShaion', 'https://github.com/shaionbd', '1511197392_website.jpg', 'cDrQ5fLrVTgCXwutY0BLDEc2JvXiTZjI9jOR5rJ60BYNEaFrcDZAjjS4qqjs', '2017-11-10 01:38:05', '2017-12-15 00:42:45'),
 (2, 'Admin', 'admin@gmail.com', NULL, 'CEO & Founder', NULL, NULL, NULL, NULL, NULL, '$2y$10$TfPhyrJM8I3t5OOW3wTXKucTfvvGuK4poRKe2dFZjmRuUZZxLxGeG', 1, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.png', 'WyuurCjKS21iQ2Jy8ygxfJzR2mffhjMIXOQH42RViXOBqED4FIHISzENiUo3', '2017-11-10 01:38:05', '2017-11-10 01:38:05'),
-(3, 'Test Manager', 'manager@gmail.com', NULL, 'Manager', NULL, NULL, NULL, NULL, NULL, '$2y$10$TfPhyrJM8I3t5OOW3wTXKucTfvvGuK4poRKe2dFZjmRuUZZxLxGeG', 2, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.png', NULL, '2017-11-10 01:38:05', '2017-11-10 01:38:05');
+(3, 'Test Manager', 'manager@gmail.com', NULL, 'Manager', NULL, NULL, NULL, NULL, NULL, '$2y$10$TfPhyrJM8I3t5OOW3wTXKucTfvvGuK4poRKe2dFZjmRuUZZxLxGeG', 2, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'default.png', NULL, '2017-11-10 01:38:05', '2017-11-10 01:38:05'),
+(4, 'Test2', 'test2@gmail.com', '016712345678', 'Content Writter', 'Hey - I am Test, a 22 years old Content Writter from Bangladesh. I\'m now studying in CUET at Mechanical Engineering. Good skill in English.', 'http://www.therankwizard.com', 'Content Writter,SEO,Technical Writter', '1 year', 'Dhaka, Bangladesh', '$2y$10$TfPhyrJM8I3t5OOW3wTXKucTfvvGuK4poRKe2dFZjmRuUZZxLxGeG', 3, '1', NULL, '3', 'https://www.facebook.com/TVirus.me', NULL, NULL, 'https://www.twitter.com/ShaionShaion', 'https://github.com/shaionbd', '1511197392_website.jpg', 'cDrQ5fLrVTgCXwutY0BLDEc2JvXiTZjI9jOR5rJ60BYNEaFrcDZAjjS4qqjs', '2017-11-10 01:38:05', '2017-12-15 00:42:45'),
+(5, 'Test3', 'test3@gmail.com', '016712345673', 'Content Writter', 'Hey - I am Test, a 22 years old Content Writter from Bangladesh. I\'m now studying in CUET at Mechanical Engineering. Good skill in English.', 'http://www.therankwizard.com', 'Content Writter,SEO,Technical Writter', '1 year', 'Dhaka, Bangladesh', '$2y$10$TfPhyrJM8I3t5OOW3wTXKucTfvvGuK4poRKe2dFZjmRuUZZxLxGeG', 3, '1', NULL, '3', 'https://www.facebook.com/TVirus.me', NULL, NULL, 'https://www.twitter.com/ShaionShaion', 'https://github.com/shaionbd', '1511197392_website.jpg', 'cDrQ5fLrVTgCXwutY0BLDEc2JvXiTZjI9jOR5rJ60BYNEaFrcDZAjjS4qqjs', '2017-11-10 01:38:05', '2017-12-15 00:42:45');
 
 -- --------------------------------------------------------
 
@@ -279,6 +305,12 @@ ALTER TABLE `payments`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `projects`
+--
+ALTER TABLE `projects`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tasks`
 --
 ALTER TABLE `tasks`
@@ -305,7 +337,7 @@ ALTER TABLE `withdrawals`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `item_submissions`
 --
@@ -320,7 +352,12 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `projects`
+--
+ALTER TABLE `projects`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `tasks`
 --
@@ -330,12 +367,13 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `withdrawals`
 --
 ALTER TABLE `withdrawals`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

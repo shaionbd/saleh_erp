@@ -30,10 +30,11 @@
                 <thead>
 
                     <tr>
-
                         <th>Task Assigned</th>
                         <th>Task Completed</th>
                         <th>Total Earning</th>
+                        <th>Penalty</th>
+                        <th>Earning</th>
                         <th>Rating</th>
                         <th>Action</th>
 
@@ -50,8 +51,10 @@
                             <td>{{ $archive->assigned_task }}</td>
                             <td>{{ $archive->delivered_task }}</td>
                             <td>{{ $archive->total_earning }}</td>
+                            <td>{{ $archive->total_penalty }}</td>
+                            <td>{{ $archive->total_earning - $archive->total_penalty }}</td>
                             <td>0</td>
-                            <td><a href="{{ route('user.archiveDetails', $archive->id) }}" class="btn btn-info">Details</a></td>
+                            <td><a href="{{ route('user.archiveDetails',  $year."-".$month) }}" class="btn btn-info">Details</a></td>
 
                         </tr>
 
@@ -67,7 +70,7 @@
 
     @php
         if($type=="current"||$type=="prev"){if($month>0){$month--;if($month==0){$year--;$month=12;}}}else{if($month<=12){$month++;if($month==13){$year++;$month=1;}}}
-        $archives=App\Task::select('id',DB::raw("SUM(MONTH(start_date) = $month AND YEAR(start_date) = $year AND process_status = 4 AND is_accepted = 1) AS assigned_task"),DB::raw("SUM(MONTH(end_date) = $month AND YEAR(end_date) = $year AND process_status = 4 AND is_accepted = 1) AS delivered_task"),DB::raw("(SELECT SUM(payments.price) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.end_date) = $month AND YEAR(tasks.end_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_earning"))->get();
+        $archives=App\Task::select('id',DB::raw("SUM(MONTH(start_date) = $month AND YEAR(start_date) = $year AND process_status = 4 AND is_accepted = 1) AS assigned_task"),DB::raw("SUM(MONTH(end_date) = $month AND YEAR(end_date) = $year AND process_status = 4 AND is_accepted = 1) AS delivered_task"),DB::raw("(SELECT SUM(payments.writter_share) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.end_date) = $month AND YEAR(tasks.end_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_earning"),DB::raw("(SELECT SUM(payments.writter_penalty) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.submission_date) = $month AND YEAR(tasks.submission_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_penalty"))->get();
     @endphp
 
     <div class="box box-success">
@@ -87,6 +90,8 @@
                         <th>Task Assigned</th>
                         <th>Task Completed</th>
                         <th>Total Earning</th>
+                        <th>Penalty</th>
+                        <th>Earning</th>
                         <th>Rating</th>
                         <th>Action</th>
 
@@ -103,8 +108,10 @@
                             <td>{{ $archive->assigned_task }}</td>
                             <td>{{ $archive->delivered_task }}</td>
                             <td>{{ $archive->total_earning }}</td>
+                            <td>{{ $archive->total_penalty }}</td>
+                            <td>{{ $archive->total_earning - $archive->total_penalty }}</td>
                             <td>0</td>
-                            <td><a href="{{ route('user.archiveDetails', $archive->id) }}" class="btn btn-info">Details</a></td>
+                            <td><a href="{{ route('user.archiveDetails',  $year."-".$month) }}" class="btn btn-info">Details</a></td>
 
                         </tr>
 
@@ -120,7 +127,7 @@
 
     @php
         if($type=="current"||$type=="prev"){if($month>0){$month--;if($month==0){$year--;$month=12;}}}else{if($month<=12){$month++;if($month==13){$year++;$month=1;}}}
-        $archives=App\Task::select('id',DB::raw("SUM(MONTH(start_date) = $month AND YEAR(start_date) = $year AND process_status = 4 AND is_accepted = 1) AS assigned_task"),DB::raw("SUM(MONTH(end_date) = $month AND YEAR(end_date) = $year AND process_status = 4 AND is_accepted = 1) AS delivered_task"),DB::raw("(SELECT SUM(payments.price) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.end_date) = $month AND YEAR(tasks.end_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_earning"))->get();
+        $archives=App\Task::select('id',DB::raw("SUM(MONTH(start_date) = $month AND YEAR(start_date) = $year AND process_status = 4 AND is_accepted = 1) AS assigned_task"),DB::raw("SUM(MONTH(end_date) = $month AND YEAR(end_date) = $year AND process_status = 4 AND is_accepted = 1) AS delivered_task"),DB::raw("(SELECT SUM(payments.writter_share) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.end_date) = $month AND YEAR(tasks.end_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_earning"),DB::raw("(SELECT SUM(payments.writter_penalty) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.submission_date) = $month AND YEAR(tasks.submission_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_penalty"))->get();
     @endphp
 
     <div class="box box-danger">
@@ -136,10 +143,11 @@
                 <thead>
 
                     <tr>
-
                         <th>Task Assigned</th>
                         <th>Task Completed</th>
                         <th>Total Earning</th>
+                        <th>Penalty</th>
+                        <th>Earning</th>
                         <th>Rating</th>
                         <th>Action</th>
 
@@ -156,8 +164,10 @@
                             <td>{{ $archive->assigned_task }}</td>
                             <td>{{ $archive->delivered_task }}</td>
                             <td>{{ $archive->total_earning }}</td>
+                            <td>{{ $archive->total_penalty }}</td>
+                            <td>{{ $archive->total_earning - $archive->total_penalty }}</td>
                             <td>0</td>
-                            <td><a href="{{ route('user.archiveDetails', $archive->id) }}" class="btn btn-info">Details</a></td>
+                            <td><a href="{{ route('user.archiveDetails', $year."-".$month) }}" class="btn btn-info">Details</a></td>
 
                         </tr>
 

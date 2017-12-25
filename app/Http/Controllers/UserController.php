@@ -143,6 +143,9 @@ class UserController extends Controller
         if(Auth::user()->role == 3){
             $data['net'] = Payment::where('writter_id', Auth::user()->id)
                                 ->sum('writter_share');
+            $data['penalty'] = Payment::where('writter_id', Auth::user()->id)
+                                ->sum('writter_penalty');
+
             $data['withdraw'] = Withdrawal::where('user_id', Auth::user()->id)
                                 ->where('request_status', 1)
                                 ->sum('amount');
@@ -158,6 +161,8 @@ class UserController extends Controller
         }else if(Auth::user()->role == 2){
             $data['net'] = Payment::where('manager_id', Auth::user()->id)
                                 ->sum('manager_share');
+            $data['penalty'] = Payment::where('manager_id', Auth::user()->id)
+                                ->sum('manager_penalty');
             $data['withdraw'] = Withdrawal::where('user_id', Auth::user()->id)
                                 ->where('request_status', 1)
                                 ->sum('amount');
@@ -197,9 +202,9 @@ class UserController extends Controller
         $data['title'] = "Tasks";
         $data['active'] = "tasks";
 
-        $data['pendingTasks'] = Task::where('process_status', 0)->get();
-        $data['onGoingTasks'] = Task::where('process_status', 1)->get();
-        $data['submittedTasks'] = Task::where(['process_status'=> 4, 'is_accepted' => 0])->get();    
+        $data['pendingTasks'] = Task::where(['process_status' => 0, 'writter_id' => Auth::user()->id])->get();
+        $data['onGoingTasks'] = Task::where(['process_status' => 1, 'writter_id' => Auth::user()->id])->get();
+        $data['submittedTasks'] = Task::where(['process_status'=> 4, 'is_accepted' => 0, 'writter_id' => Auth::user()->id])->get();    
 
         return view('writter.tasks')->with($data);
     }
@@ -237,13 +242,11 @@ class UserController extends Controller
         }
 
         $archives = Task::select('id',
-                            DB::raw("SUM(MONTH(start_date) = $month AND YEAR(start_date) = $year AND process_status = 4 AND is_accepted = 1) AS assigned_task"),
+                            DB::raw("SUM(MONTH(start_date) = $month AND YEAR(start_date) = $year AND process_status = 4) AS assigned_task"),
                             DB::raw("SUM(MONTH(end_date) = $month AND YEAR(end_date) = $year AND process_status = 4 AND is_accepted = 1) AS delivered_task"),
-                            DB::raw("(SELECT SUM(payments.price) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.submission_date) = $month AND YEAR(tasks.submission_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_earning")
+                            DB::raw("(SELECT SUM(payments.writter_share) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.submission_date) = $month AND YEAR(tasks.submission_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_earning"),
+                            DB::raw("(SELECT SUM(payments.writter_penalty) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.submission_date) = $month AND YEAR(tasks.submission_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_penalty")
                         )->get();
-
-        //dd($archives);
-
         $data = [
 
             'title' => "Archives",
@@ -254,16 +257,19 @@ class UserController extends Controller
             'archives' => $archives
 
         ];
-
         return view('writter.archive')->with($data);
     }
 
-    public function getArchiveDetails($id)
+    public function getArchiveDetails($year_month)
     {
         $data['title'] = "Task Details";
-        $data['active'] = "tasks";
+        $data['active'] = "archives";
 
-         dd($id);
+        $y_m = explode("-", $year_month);
+        $data['month'] = $y_m[1];
+        $data['year'] = $y_m[0];
+
+        $data['tasks'] = Task::where('start_date', 'like', $year_month.'-%')->get();
 
         return view('writter.archive_details')->with($data);
     }
