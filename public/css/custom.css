@@ -87,3 +87,7 @@
 .social i#facebook:hover {
   color: #0123aa;
 }
+.task{
+  background: #dddddd;
+  cursor: pointer;
+}

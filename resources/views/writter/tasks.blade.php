@@ -31,42 +31,32 @@
                   <th width="33%" class="text-center">On Going Tasks</th>
                   <th width="33%" class="text-center">Submitted Tasks</th>
                 </tr>
-                
+
                 <tr>
                   <td>
                   	@foreach($pendingTasks as $pendingTask)
-  					          <div class="box box-primary">
-  			                <div class="text-center box-header">
-  			                  <i class="fa fa-tasks"></i>
-  			                  <h3 class="box-title">
-  			                  	@php
-  			                  		$item = App\Item::where('id', $pendingTask->item_id)->first();
-  			                  	@endphp
-  			                  	{{ $item->name }}
-  			                  </h3>
-  			                  
-  			                </div>
-  		                
-  			                <div class="box-body">
-  			                  	<div class="callout callout-danger">
-  			                  		<p><strong>Start Date: </strong>{{ $pendingTask->start_date }}</p>
-  			                  		<p><strong>End Date: </strong>{{ $pendingTask->end_date }}</p>
-  			                  		<p><strong>Words: </strong>{{ $pendingTask->word_counts }}</p>
-  				                    <p>{{ $pendingTask->description }}</p>
-  				                    
-  			                  	</div>
-  			                </div>
-  			                <div class="text-center box-footer clearfix">
-  			                	<form action="{{ route('user.pending_status_change') }}" method="post">
-  			                		<input type="hidden" name="task_id" value="{{ $pendingTask->id }}">
-  			                		<input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-  				                	<button type="submit" class="btn btn-danger" name="decline" value="decline">Decline <i class="fa fa-times"></i></button>
-
-  				                	<button type="submit" class="btn btn-success" name="accept" value="accept">Accept <i class="fa fa-arrow-circle-right"></i></button>
-  				                	{{ csrf_field() }}
-  				                </form>
-  				              </div>
-  	              	  </div>
+                      <div class="box box-solid bg-green-gradient task" data-taskid="{{ $pendingTask->id }}" data-tasktype="pending">
+                        <div class="box-header">
+                          <i class="fa fa-tasks"></i>
+                          <h3 class="box-title">
+                            @php
+                              $item = App\Item::where('id', $pendingTask->item_id)->first();
+                            @endphp
+                            <b>{{ $item->name }}</b>
+                          </h3>
+                          <!-- tools box -->
+                          <div class="pull-right box-tools">
+                            <!-- button with a dropdown -->
+                            <form action="{{ route('user.pending_status_change') }}" method="post">
+                              <input type="hidden" name="task_id" value="{{ $pendingTask->id }}">
+                              <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                              <button type="submit" data-toggle="tooltip" title="accept" class="btn btn-success btn-sm" name="accept"><i class="fa fa-check"></i></button>
+                              <button type="submit" data-toggle="tooltip" title="decline" class="btn btn-danger btn-sm" name="decline"><i class="fa fa-times"></i></button>
+                              {{ csrf_field() }}
+                            </form>
+                          </div><!-- /. tools -->
+                        </div><!-- /.box-header -->
+                      </div>
                   	@endforeach
                   </td>
 
@@ -81,9 +71,9 @@
   		                  	@endphp
   		                  	{{ $item->name }}
   		                  </h3>
-  		                  
+
   		                </div>
-  	                
+
   		                <div class="box-body">
   		                  	<div class="callout callout-warning">
                             @if($onGoingTask->on_revision)
@@ -93,7 +83,7 @@
   		                  		<p><strong>End Date: </strong>{{ $onGoingTask->end_date }}</p>
   		                  		<p><strong>Words: </strong>{{ $onGoingTask->word_counts }}</p>
   			                    <p>{{ $onGoingTask->description }}</p>
-  			                    
+
   		                  	</div>
   		                </div>
   		                <div class="text-center box-footer clearfix">
@@ -125,7 +115,7 @@
                               </div>
                             </form>
                           </div>
-                        </div>  
+                        </div>
                       </div>
                 	  </div>
                   	@endforeach
@@ -146,9 +136,9 @@
                               @endphp
                               {{ $item->name }}
                             </h3>
-                            
+
                           </div>
-                        
+
                           <div class="box-body">
                               @if($status->manager_rivision == 0)
                               <div class="callout callout-info">
@@ -156,16 +146,16 @@
                               <div class="callout callout-success">
                               @endif
                                 <p><strong>Submitted Date: </strong>{{ $submittedTask->start_date }}</p>
-                                
+
                                 @if($status->re_submission_date)
                                   <p><strong>End Date: </strong>{{ $status->re_submission_date }}</p>
                                 @else
                                   <p><strong>End Date: </strong>{{ $submittedTask->end_date }}</p>
                                 @endif
-                               
+
                                 <p><strong>Words: </strong>{{ $submittedTask->word_counts }}</p>
                                 <p><strong>Submitted Date: </strong>{{ $submittedTask->submission_date }}</p>
-                              
+
                                 <p><strong>Revision By: </strong>
                                 @if($status->manager_rivision == 0)
                                   Manager
@@ -174,23 +164,23 @@
                                 @endif
                                 </p>
 
-                                
+
                               </div>
                           </div>
                         </div>
                       @endif
                     @endforeach
                   </td>
-                  
+
                 </tr>
-         		
+
               </table>
 
               <table class="table table-bordered">
                 <tr>
                   <th class="text-center">Revision Tasks</th>
                 </tr>
-                
+
                 <tr>
                   <td>
                     <div class="row">
@@ -209,30 +199,30 @@
                                   @endphp
                                   {{ $item->name }}
                                 </h3>
-                                
+
                               </div>
-                            
+
                               <div class="box-body">
                                   <div class="callout callout-danger">
                                     <p><strong>Words: </strong>{{ $submittedTask->word_counts }}</p>
                                     <p><strong>Re-submission Date: </strong><br>{{ $status->re_submission_date }}</p>
-                                    
+
                                     @if($status->admin_rivision == 2)
-                                      <p><strong>Task revised by: </strong>Admin</p> 
+                                      <p><strong>Task revised by: </strong>Admin</p>
                                       <p>{{ $status->admin_revision_description }}</p>
                                     @else
                                       <p><strong>Task revised by: </strong>Manager</p>
                                       <p>{{ $status->manager_revision_description }}</p>
-                                    @endif  
+                                    @endif
                                     <p><a href="{{ asset('storage/app/public/tasks/'.$status->file) }}" download="{{ $status->file }}">View Task file</a></p>
                                   </div>
                               </div>
                               <div class="text-center box-footer clearfix">
                                 <form action="{{ route('user.revision_pending_status_change') }}" method="post">
-                                
+
                                 <input type="hidden" name="task_id" value="{{ $submittedTask->id }}">
                                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                
+
                                 <button type="submit" class="btn btn-success" name="accept" value="accept">Rivision <i class="fa fa-arrow-circle-right"></i></button>
                                 {{ csrf_field() }}
                               </form>
@@ -244,196 +234,80 @@
                     </div>
                   </td>
                 </tr>
-            
+
               </table>
 
             </div><!-- /.box-body -->
 
-            
-           
           </div><!-- /.box -->
-
-          <!-- <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Condensed Full Width Table</h3>
-            </div>/.box-header
-            <div class="box-body no-padding">
-              <table class="table table-condensed">
-                <tr>
-                  <th style="width: 10px">#</th>
-                  <th>Task</th>
-                  <th>Progress</th>
-                  <th style="width: 40px">Label</th>
-                </tr>
-                <tr>
-                  <td>1.</td>
-                  <td>Update software</td>
-                  <td>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-red">55%</span></td>
-                </tr>
-                <tr>
-                  <td>2.</td>
-                  <td>Clean database</td>
-                  <td>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-yellow">70%</span></td>
-                </tr>
-                <tr>
-                  <td>3.</td>
-                  <td>Cron job running</td>
-                  <td>
-                    <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-light-blue">30%</span></td>
-                </tr>
-                <tr>
-                  <td>4.</td>
-                  <td>Fix and squish bugs</td>
-                  <td>
-                    <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-success" style="width: 90%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-green">90%</span></td>
-                </tr>
-              </table>
-            </div>/.box-body
-          </div>/.box -->
         </div><!-- /.col -->
-        <!-- <div class="col-md-4">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Simple Full Width Table</h3>
-              <div class="box-tools">
-                <ul class="pagination pagination-sm no-margin pull-right">
-                  <li><a href="#">&laquo;</a></li>
-                  <li><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li><a href="#">3</a></li>
-                  <li><a href="#">&raquo;</a></li>
-                </ul>
-              </div>
-            </div>/.box-header
-            <div class="box-body no-padding">
-              <table class="table">
-                <tr>
-                  <th style="width: 10px">#</th>
-                  <th>Task</th>
-                  <th>Progress</th>
-                  <th style="width: 40px">Label</th>
-                </tr>
-                <tr>
-                  <td>1.</td>
-                  <td>Update software</td>
-                  <td>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-red">55%</span></td>
-                </tr>
-                <tr>
-                  <td>2.</td>
-                  <td>Clean database</td>
-                  <td>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-yellow">70%</span></td>
-                </tr>
-                <tr>
-                  <td>3.</td>
-                  <td>Cron job running</td>
-                  <td>
-                    <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-light-blue">30%</span></td>
-                </tr>
-                <tr>
-                  <td>4.</td>
-                  <td>Fix and squish bugs</td>
-                  <td>
-                    <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-success" style="width: 90%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-green">90%</span></td>
-                </tr>
-              </table>
-            </div>/.box-body
-          </div>/.box
-        
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Striped Full Width Table</h3>
-            </div>/.box-header
-            <div class="box-body no-padding">
-              <table class="table table-striped">
-                <tr>
-                  <th style="width: 10px">#</th>
-                  <th>Task</th>
-                  <th>Progress</th>
-                  <th style="width: 40px">Label</th>
-                </tr>
-                <tr>
-                  <td>1.</td>
-                  <td>Update software</td>
-                  <td>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-red">55%</span></td>
-                </tr>
-                <tr>
-                  <td>2.</td>
-                  <td>Clean database</td>
-                  <td>
-                    <div class="progress progress-xs">
-                      <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-yellow">70%</span></td>
-                </tr>
-                <tr>
-                  <td>3.</td>
-                  <td>Cron job running</td>
-                  <td>
-                    <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-light-blue">30%</span></td>
-                </tr>
-                <tr>
-                  <td>4.</td>
-                  <td>Fix and squish bugs</td>
-                  <td>
-                    <div class="progress progress-xs progress-striped active">
-                      <div class="progress-bar progress-bar-success" style="width: 90%"></div>
-                    </div>
-                  </td>
-                  <td><span class="badge bg-green">90%</span></td>
-                </tr>
-              </table>
-            </div>/.box-body
-          </div>/.box
-        </div>/.col -->
       </div><!-- /.row -->
   </section><!-- / .section -->
 
 </section><!-- /.content -->
+
+<div id="taskModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div id="pending-body" class="modal-body">
+        <h3 class="text-center">About Section Of Dem<o/h3>
+        <div class="progress">
+          <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
+              40% complete
+            </div>
+          </div>
+        <div class="row">
+          <div class="col-md-8">
+            <p><strong>Tracing ID: </strong>1235</p>
+            <p><strong>Manager: </strong>1235</p>
+            <p><strong>Article Title: </strong>1235</p>
+            <p><strong>Article Type: </strong>1235</p>
+            <p><strong>Word Count: </strong>1235</p>
+            <p><strong>Admin Instruction: </strong><br>
+              <i>1235</i>
+            </p>
+            <p><strong>Manager Instruction: </strong><br>
+             <i>sfjnksdjfdksndkjn</i>
+            </p>
+
+            <div class="box">
+                <div class="box-header">
+                  <h3 class="box-title">Item Submission</h3>
+                </div><!-- /.box-header -->
+                <div class="box-body table-responsive no-padding">
+                  <table class="table table-hover">
+                    <tr>
+                      <th>File</th>
+                      <th>Status</th>
+                      <th>Manager Rivision</th>
+                      <th>Admin Rivision</th>
+                      <th>Reason</th>
+                      <th>Submission Date</th>
+                      <th>Re-submission Date</th>
+                    </tr>
+                    <tr>
+                      <td><a href="#">hello.docx</a></td>
+                      <td>Revisioning by Manager</td>
+                      <td>--</td>
+                      <td>--</td>
+                      <td>--</td>
+                      <td>17th December 2017 at 12:00pm</td>
+                      <td>--</td>
+                    </tr>
+                  </table>
+                </div><!-- /.box-body -->
+              </div><!-- /.box -->
+
+          </div>
+          <div class="col-md-4">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 @endsection

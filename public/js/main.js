@@ -71,3 +71,16 @@ $('#image-input').on('focus', function(event) {
         $('#image-error').addClass('hidden');
     }
 });
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+
+$('.task').on('click', function(){
+    var task_id = $(this).data('taskid');
+    var task_type = $(this).data('tasktype');
+
+    if(task_type == "pending"){
+        $('#taskModal').modal('show');
+    }
+});
