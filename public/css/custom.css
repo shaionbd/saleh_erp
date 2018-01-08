@@ -160,3 +160,7 @@ preloader.start bar.active {
   transform: scale(1.2);
   opacity: 1;
 }
+
+.modal-body{
+  min-height: 400px;
+}

@@ -204,7 +204,7 @@ class UserController extends Controller
 
         $data['pendingTasks'] = Task::where(['process_status' => 0, 'writter_id' => Auth::user()->id])->get();
         $data['onGoingTasks'] = Task::where(['process_status' => 1, 'writter_id' => Auth::user()->id])->get();
-        $data['submittedTasks'] = Task::where(['process_status'=> 4, 'is_accepted' => 0, 'writter_id' => Auth::user()->id])->get();    
+        $data['submittedTasks'] = Task::where(['process_status'=> 4, 'is_accepted' => 0, 'writter_id' => Auth::user()->id])->get();
 
         return view('writter.tasks')->with($data);
     }
@@ -214,14 +214,14 @@ class UserController extends Controller
         if($type == 'current')
         {
             $month = date('m');
-            $year = date('Y');  
+            $year = date('Y');
         }
         else if($type == 'prev')
         {
             if($month > 0)
             {
                 $month -- ;
-                if ($month == 0) 
+                if ($month == 0)
                 {
                     $year--;
                     $month = 12;
@@ -233,12 +233,12 @@ class UserController extends Controller
             if($month <= 12)
             {
                 $month ++ ;
-                if ($month == 13) 
+                if ($month == 13)
                 {
                     $year++;
                     $month = 1;
                 }
-            }  
+            }
         }
 
         $archives = Task::select('id',
@@ -299,7 +299,7 @@ class UserController extends Controller
     public function postTaskRivisionStatusChange(Request $request){
         $task_id = $request['task_id'];
         $user_id = $request['user_id'];
-        
+
         $task = Task::where('id', $task_id)
                     ->where('writter_id', $user_id)
                     ->first();
@@ -311,7 +311,7 @@ class UserController extends Controller
 
     }
 
-    public function postOnGoingTaskSubmit(Request $request){ 
+    public function postOnGoingTaskSubmit(Request $request){
         $task_id = $request['task_id'];
         $user_id = $request['user_id'];
 
@@ -338,6 +338,104 @@ class UserController extends Controller
 
         }
         return redirect()->route('user.tasks');
+    }
+
+    // get pending task of user
+    public function getPendingTask(Request $request){
+        $task_id = $request['task_id'];
+        echo '
+            <h3 class="text-center">About Section Of Demo</h3>
+            <div class="progress">
+              <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
+                  40% complete
+              </div>
+            </div>
+            <div class="row">
+              <div class="task-info col-md-8">
+                <div class="row">
+                  <div class="col-md-4">
+                    <p><strong>Tracing ID: </strong>1235</p>
+                    <p><strong>Project: </strong>Demo</p>
+                  </div>
+                  <div class="col-md-4">
+                    <p><strong>Article Title: </strong>1235</p>
+                    <p><strong>Article Type: </strong>1235</p>
+                  </div>
+                  <div class="col-md-4">
+                    <p><strong>Word Count: </strong>1235</p>
+                    <p><strong>Manager: </strong>1235</p>
+                  </div>
+                </div>
+                <p>
+                  <strong>Admin Instruction: </strong>
+                  <div class="well">
+                    <i>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</i>
+                  </div>
+                </p>
+                <p><strong>Manager Instruction: </strong><br>
+                  <div class="well">
+                    <i>Lorem ipsum dolor sit amet, enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</i>
+                  </div>
+                </p>
+              </div>
+              <div class="task-info col-md-4">
+                <p><strong>Estimate Earning: </strong> $25</p>
+                <p><strong>Assign Date: </strong>1st Jan 2018 at 11:00 PM</p>
+                <p><strong>Submission Date: </strong>7th Jan 2018 at 12:00 AM</p>
+                <p><strong>Time Tracker: </strong><span id="tracker"></span></p>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="btn-group btn-group-justified">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-danger">6 Days</button>
+                      </div>
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-primary">22 Hours</button>
+                      </div>
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-primary">47 Minutes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <a href="#" class="btn btn-warning btn-block">Request for Time Extend</a>
+                <br>
+                <p><strong>Total Earning: </strong>$23</p>
+                <p><strong>Total Panalty: </strong>$2</p>
+              </div>
+
+              <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header">
+                      <h3 class="box-title">Item Submission</h3>
+                    </div><!-- /.box-header -->
+                    <div class="box-body table-responsive no-padding">
+                      <table class="table table-hover">
+                        <tr>
+                          <th>File</th>
+                          <th>Status</th>
+                          <th>Manager Rivision</th>
+                          <th>Admin Rivision</th>
+                          <th>Reason</th>
+                          <th>Submission Date</th>
+                          <th>Re-submission Date</th>
+                        </tr>
+                        <tr>
+                          <td><a href="#">hello.docx</a></td>
+                          <td>Revisioning by Manager</td>
+                          <td>--</td>
+                          <td>--</td>
+                          <td>--</td>
+                          <td>17th December 2017 at 12:00pm</td>
+                          <td>--</td>
+                        </tr>
+                      </table>
+                    </div><!-- /.box-body -->
+                  </div><!-- /.box -->
+              </div>
+            </div>
+          ';
     }
     //============================= /for writter ==============================//
 

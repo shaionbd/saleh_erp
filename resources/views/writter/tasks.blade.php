@@ -35,7 +35,7 @@
                 <tr>
                   <td>
                   	@foreach($pendingTasks as $pendingTask)
-                      <div class="box box-solid bg-green-gradient task" data-taskid="{{ $pendingTask->id }}" data-tasktype="pending">
+                      <div class="box box-solid bg-green-gradient task" data-taskid="{{ $pendingTask->id }}" data-tasktype="pending" data-url="{{ route('task.pending') }}">
                         <div class="box-header">
                           <i class="fa fa-tasks"></i>
                           <h3 class="box-title">
@@ -250,8 +250,27 @@
   <div class="modal-dialog modal-lg">
     <!-- Modal content-->
     <div class="modal-content">
-      <div id="pending-body" class="modal-body">
+      <div class="modal-body">
         <preloader></preloader>
+        <div id="pending-body">
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+@endsection
+
+
+
+<div id="demo" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div id="pending-body-dmo" class="modal-body">
+        {{-- <preloader></preloader> --}}
         <h3 class="text-center">About Section Of Demo</h3>
         <div class="progress">
           <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
@@ -348,62 +367,3 @@
 
   </div>
 </div>
-<script type="text/javascript">
-(function(){
-
-
-    var host = document.getElementsByTagName( 'preloader' )[0];
-    var bars = [];
-
-    var i = 0;
-
-    host.hide = function() {
-      this.style.display = 'none';
-    };
-    host.show = function() {
-      this.style.display = 'block';
-    };
-
-    /*host.addEventListener( 'show', host.show, false);
-    host.addEventListener( 'hide', host.hide, false);*/
-
-    while( i < 3 ) {
-      i++;
-      var bar = document.createElement('bar');
-      bars.push( bar );
-      host.appendChild( bar );
-    };
-
-    var barAnimation = function( index ) {
-
-      setTimeout(function(){
-
-        setInterval(function(){
-
-          bars[index].setAttribute( 'class', ( bars[index].getAttribute( 'class' ) == 'active' ) ? '' : 'active' );
-        }, 700);
-
-      }, ( index == 0 ) ? 50 : index*150 + 50);
-    };
-
-    host.setAttribute( 'class', 'animate' );
-
-    setTimeout(function(){
-
-      host.setAttribute( 'class', 'start animate' );
-    }, 300);
-    setTimeout(function(){
-
-      host.setAttribute( 'class', 'start complete' );
-    }, 1100);
-
-    setTimeout(function(){
-      for (var b = 0; b < bars.length; b++) {
-
-        barAnimation( b );
-      };
-    }, 1100);
-
-  })();
-</script>
-@endsection
