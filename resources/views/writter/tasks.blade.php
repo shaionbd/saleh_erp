@@ -251,26 +251,69 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div id="pending-body" class="modal-body">
-        <h3 class="text-center">About Section Of Dem<o/h3>
+        <preloader></preloader>
+        <h3 class="text-center">About Section Of Demo</h3>
         <div class="progress">
           <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:40%">
               40% complete
             </div>
           </div>
         <div class="row">
-          <div class="col-md-8">
-            <p><strong>Tracing ID: </strong>1235</p>
-            <p><strong>Manager: </strong>1235</p>
-            <p><strong>Article Title: </strong>1235</p>
-            <p><strong>Article Type: </strong>1235</p>
-            <p><strong>Word Count: </strong>1235</p>
-            <p><strong>Admin Instruction: </strong><br>
-              <i>1235</i>
+          <div class="task-info col-md-8">
+            <div class="row">
+              <div class="col-md-4">
+                <p><strong>Tracing ID: </strong>1235</p>
+                <p><strong>Project: </strong>Demo</p>
+              </div>
+              <div class="col-md-4">
+                <p><strong>Article Title: </strong>1235</p>
+                <p><strong>Article Type: </strong>1235</p>
+              </div>
+              <div class="col-md-4">
+                <p><strong>Word Count: </strong>1235</p>
+                <p><strong>Manager: </strong>1235</p>
+              </div>
+            </div>
+            <p>
+              <strong>Admin Instruction: </strong>
+              <div class="well">
+                <i>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</i>
+              </div>
             </p>
             <p><strong>Manager Instruction: </strong><br>
-             <i>sfjnksdjfdksndkjn</i>
+              <div class="well">
+                <i>Lorem ipsum dolor sit amet, enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</i>
+              </div>
             </p>
+          </div>
+          <div class="task-info col-md-4">
+            <p><strong>Estimate Earning: </strong> $25</p>
+            <p><strong>Assign Date: </strong>1st Jan 2018 at 11:00 PM</p>
+            <p><strong>Submission Date: </strong>7th Jan 2018 at 12:00 AM</p>
+            <p><strong>Time Tracker: </strong><span id="tracker"></span></p>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="btn-group btn-group-justified">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-danger">6 Days</button>
+                  </div>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-primary">22 Hours</button>
+                  </div>
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-primary">47 Minutes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+            <a href="#" class="btn btn-warning btn-block">Request for Time Extend</a>
+            <br>
+            <p><strong>Total Earning: </strong>$23</p>
+            <p><strong>Total Panalty: </strong>$2</p>
+          </div>
 
+          <div class="col-md-12">
             <div class="box">
                 <div class="box-header">
                   <h3 class="box-title">Item Submission</h3>
@@ -298,10 +341,6 @@
                   </table>
                 </div><!-- /.box-body -->
               </div><!-- /.box -->
-
-          </div>
-          <div class="col-md-4">
-
           </div>
         </div>
       </div>
@@ -309,5 +348,62 @@
 
   </div>
 </div>
+<script type="text/javascript">
+(function(){
 
+
+    var host = document.getElementsByTagName( 'preloader' )[0];
+    var bars = [];
+
+    var i = 0;
+
+    host.hide = function() {
+      this.style.display = 'none';
+    };
+    host.show = function() {
+      this.style.display = 'block';
+    };
+
+    /*host.addEventListener( 'show', host.show, false);
+    host.addEventListener( 'hide', host.hide, false);*/
+
+    while( i < 3 ) {
+      i++;
+      var bar = document.createElement('bar');
+      bars.push( bar );
+      host.appendChild( bar );
+    };
+
+    var barAnimation = function( index ) {
+
+      setTimeout(function(){
+
+        setInterval(function(){
+
+          bars[index].setAttribute( 'class', ( bars[index].getAttribute( 'class' ) == 'active' ) ? '' : 'active' );
+        }, 700);
+
+      }, ( index == 0 ) ? 50 : index*150 + 50);
+    };
+
+    host.setAttribute( 'class', 'animate' );
+
+    setTimeout(function(){
+
+      host.setAttribute( 'class', 'start animate' );
+    }, 300);
+    setTimeout(function(){
+
+      host.setAttribute( 'class', 'start complete' );
+    }, 1100);
+
+    setTimeout(function(){
+      for (var b = 0; b < bars.length; b++) {
+
+        barAnimation( b );
+      };
+    }, 1100);
+
+  })();
+</script>
 @endsection
