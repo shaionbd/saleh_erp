@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Task;
+use App\Projects;
+use App\Item;
 use App\ItemSubmission;
 use App\Payment;
 use App\Withdrawal;
@@ -343,6 +345,13 @@ class UserController extends Controller
     // get pending task of user
     public function getPendingTask(Request $request){
         $task_id = $request['task_id'];
+
+        $task_info = Task::where('id', $task_id)
+                ->where('writter_id', Auth::user()->id)
+                ->first();
+        $item_info = Item::where('id', $task_info->item_id)->first();
+        $project_info = Projects::where('id', $task_info->item_id)->first();
+
         echo '
             <h3 class="text-center">About Section Of Demo</h3>
             <div class="progress">
