@@ -23,12 +23,13 @@
             <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/AdminLTE.min.css') }}">
             <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/skin-blue.min.css') }}">
             <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/plugins/select2/select2.css') }}">
             <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/custom.css') }}">
         @else
             <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
             <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
             <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/awesome-bootstrap-checkbox/0.3.7/awesome-bootstrap-checkbox.min.css'>
-            <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/login.css') }}"> 
+            <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/login.css') }}">
         @endif
         @stack('css')
 
@@ -53,7 +54,7 @@
             <div id="particles-js"></div>
 
             <div>
-                
+
                 @yield('content')
 
             </div>
@@ -63,12 +64,12 @@
     @else
 
         <body class="hold-transition skin-blue sidebar-mini">
-    
+
             <div class="wrapper">
 
                 <!-- Main Header -->
                 <header class="main-header">
-            
+
                     @include('layouts.navbar')
 
                 </header>
@@ -82,7 +83,7 @@
 
                 <!-- Content Wrapper. Contains page content -->
                 <div class="content-wrapper">
-                    
+
                     @yield('content')
 
                 </div><!-- /.content-wrapper -->
@@ -112,23 +113,27 @@
         @endif
 
         <!-- Scripts -->
-        <script type="text/javascript" src="{{ URL::asset('public/js/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ URL::asset('public/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
        <!--  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script> -->
         <script type="text/javascript" src="{{ URL::asset('public/js/bootstrap.min.js') }}"></script>
         @if (Auth::user())
             <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-            
             <script type="text/javascript" src="{{ URL::asset('public/js/notify.min.js') }}"></script>
-            
+            <script type="text/javascript" src="{{ URL::asset('public/plugins/select2/select2.js') }}"></script>
             <script type="text/javascript" src="{{ URL::asset('public/js/app.min.js') }}"></script>
-
             <script type="text/javascript" src="{{ URL::asset('public/js/main.js') }}"></script>
+            <script>
+            $(function () {
+               //Initialize Select2 Elements
+               $(".select2").select2();
+             });
+            </script>
         @else
             <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
             <script type="text/javascript" src="{{ URL::asset('public/js/login.js') }}"></script>
         @endif
         @stack('js')
-        
+
     </footer>
 
 </html>

@@ -31,10 +31,22 @@
     @if(Auth::user()->role == 3)
       <!-- user sidebar -->
       <li @if($active == 'tasks') class="active" @endif ><a href="{{ route('user.tasks') }}"><i class="fa fa-tasks"></i> <span>Tasks</span></a></li>
-      <li @if($active == 'archives') class="active" @endif ><a href="{{ url('/writter/archives/current') }}"><i class="fa fa-archive"></i> <span>Archive</span></a></li>
+      <li @if($active == 'archives') class="active" @endif ><a href="{{ route('user.archive', 'current') }}"><i class="fa fa-archive"></i> <span>Archive</span></a></li>
       <li @if($active == 'payments') class="active" @endif><a href="{{ route('user.payment') }}"><i class="fa fa-money"></i> <span>Payment</span></a></li>
       <li @if($active == 'profile') class="active" @endif><a href="{{ route('user.profile') }}"><i class="fa fa-user-o"></i> <span>Profile</span></a></li>
     @elseif(Auth::user()->role == 2)
+      <!-- manager sidebar -->
+      <li @if($active == 'projects') class="active" @endif ><a href="{{ route('manager.projects') }}"><i class="fa fa-tasks"></i> <span>Projects</span></a></li>
+      <li @if($active == 'tasks') class="active" @endif ><a href="{{ route('manager.tasks') }}"><i class="fa fa-tasks"></i> <span>Tasks</span></a></li>
+      <li @if($active == 'archives') class="active" @endif ><a href="{{ route('user.archive', 'current') }}"><i class="fa fa-archive"></i> <span>Archive</span></a></li>
+      <li @if($active == 'payments') class="active" @endif><a href="{{ route('user.payment') }}"><i class="fa fa-money"></i> <span>Payment</span></a></li>
+      <li @if($active == 'profile') class="active treeview" @endif>
+        <a href="#"><i class="fa fa-user-o"></i> <span>Profile</span> <i class="fa fa-angle-left pull-right"></i></a>
+        <ul class="treeview-menu">
+          <li><a href="{{ route('user.profile') }}"><i class="fa fa-angle-right"></i> My Biography</a></li>
+          <li><a href="{{ route('user.managerTeam') }}"><i class="fa fa-angle-right"></i> My Team</a></li>
+        </ul>
+      </li>
 
     <!-- manager sidebar -->
     @elseif(Auth::user()->role == 1)
@@ -53,5 +65,5 @@
       </ul>
     </li> -->
   </ul><!-- /.sidebar-menu -->
-  
+
 </section>

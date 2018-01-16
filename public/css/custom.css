@@ -91,6 +91,11 @@
   background: #dddddd;
   cursor: pointer;
 }
+
+.item{
+  background: #dddddd;
+  cursor: pointer;
+}
 .task-info > p, .task-info > .well{
   letter-spacing: 0.75px;
   font-size: 16px;
@@ -161,6 +166,9 @@ preloader.start bar.active {
   opacity: 1;
 }
 
-.modal-body{
+.task-body{
   min-height: 400px;
+}
+h4.modal-title{
+  color: #333;
 }

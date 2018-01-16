@@ -45,12 +45,7 @@ var preloader = function(){
 	}, 1100);
 };
 
-host.hide = function() {
-	this.style.display = 'none';
-};
-host.show = function() {
-	this.style.display = 'block';
-};
+
 
 $('#availability').on('change', function(){
 	var userId = $(this).data('userid');
@@ -126,27 +121,172 @@ $('#image-input').on('focus', function(event) {
     }
 });
 
+host.hide = function() {
+	this.style.display = 'none';
+};
+
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
 });
 
 $('.task').on('click', function(){
-
 		preloader();
     var task_id = $(this).data('taskid');
     var task_type = $(this).data('tasktype');
 		var getUrl = $(this).data('url');
 
     if(task_type == "pending"){
+				$('#task-body').html("");
         $('#taskModal').modal('show');
 				$.ajax({
 						url: getUrl,
 						type: "post",
 	        	data: {task_id: task_id, _token: token},
 	        	success: function(body){
-							$('#pending-body').html(body);
+							$('#task-body').html("");
+							$('#task-body').html(body);
+							setTimeout(function(){host.hide();}, 2000);
+						}
+				});
+    }else if(task_type == "onGoing"){
+				$('#task-body').html("");
+        $('#taskModal').modal('show');
+				$.ajax({
+						url: getUrl,
+						type: "post",
+	        	data: {task_id: task_id, _token: token},
+	        	success: function(body){
+							$('#task-body').html("");
+							$('#task-body').html(body);
+							setTimeout(function(){host.hide();}, 2000);
+						}
+				});
+    }else if(task_type == "managerOnGoing"){
+				$('#task-body').html("");
+        $('#taskModal').modal('show');
+				$.ajax({
+						url: getUrl,
+						type: "post",
+	        	data: {task_id: task_id, _token: token},
+	        	success: function(body){
+							$('#task-body').html("");
+							$('#task-body').html(body);
+							setTimeout(function(){host.hide();}, 2000);
+						}
+				});
+    }else if(task_type == "submitted"){
+				$('#task-body').html("");
+        $('#taskModal').modal('show');
+				$.ajax({
+						url: getUrl,
+						type: "post",
+	        	data: {task_id: task_id, _token: token},
+	        	success: function(body){
+							$('#task-body').html("");
+							$('#task-body').html(body);
+							setTimeout(function(){host.hide();}, 2000);
+						}
+				});
+    }else if(task_type == "manager_submitted"){
+				$('#task-body').html("");
+        $('#taskModal').modal('show');
+				$.ajax({
+						url: getUrl,
+						type: "post",
+	        	data: {task_id: task_id, _token: token},
+	        	success: function(body){
+							$('#task-body').html("");
+							$('#task-body').html(body);
+							setTimeout(function(){host.hide();}, 2000);
+						}
+				});
+    }else if(task_type == "review"){
+				$('#task-body').html("");
+        $('#taskModal').modal('show');
+				$.ajax({
+						url: getUrl,
+						type: "post",
+	        	data: {task_id: task_id, _token: token},
+	        	success: function(body){
+							$('#task-body').html("");
+							$('#task-body').html(body);
+							setTimeout(function(){host.hide();}, 2000);
+						}
+				});
+    }else if(task_type == "manager_review"){
+				$('#task-body').html("");
+        $('#taskModal').modal('show');
+				$.ajax({
+						url: getUrl,
+						type: "post",
+	        	data: {task_id: task_id, _token: token},
+	        	success: function(body){
+							$('#task-body').html("");
+							$('#task-body').html(body);
+							setTimeout(function(){host.hide();}, 2000);
+						}
+				});
+}else if(task_type == "manager_revision"){
+				$('#task-body').html("");
+        $('#taskModal').modal('show');
+				$.ajax({
+						url: getUrl,
+						type: "post",
+	        	data: {task_id: task_id, _token: token},
+	        	success: function(body){
+							$('#task-body').html("");
+							$('#task-body').html(body);
+							setTimeout(function(){host.hide();}, 2000);
+						}
+				});
+    }else if(task_type == "assign"){
+				$('#task-body').html("");
+        $('#taskModal').modal('show');
+				$.ajax({
+						url: getUrl,
+						type: "post",
+	        	data: {task_id: task_id, _token: token},
+	        	success: function(body){
+							$('#task-body').html("");
+							$('#task-body').html(body);
+							setTimeout(function(){host.hide();}, 2000);
+						}
+				});
+    }else if(task_type == "writter_pending"){
+				$('#task-body').html("");
+        $('#taskModal').modal('show');
+				$.ajax({
+						url: getUrl,
+						type: "post",
+	        	data: {task_id: task_id, _token: token},
+	        	success: function(body){
+							$('#task-body').html("");
+							$('#task-body').html(body);
 							setTimeout(function(){host.hide();}, 2000);
 						}
 				});
     }
+
 });
+
+$('.item').on('click', function(){
+		preloader();
+		var item_id = $(this).data('itemid');
+		var item_type = $(this).data('itemtype');
+		var getUrl = $(this).data('url');
+
+		if(item_type == "pending"){
+				$('#task-body').html("");
+				$('#taskModal').modal('show');
+				$.ajax({
+						url: getUrl,
+						type: "post",
+						data: {item_id: item_id, _token: token},
+						success: function(body){
+							$('#task-body').html("");
+							$('#task-body').html(body);
+							setTimeout(function(){host.hide();}, 2000);
+						}
+				});
+		}
+	});

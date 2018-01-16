@@ -69,8 +69,9 @@
     </div><!-- /.box -->
 
     @php
+        if(Auth::user()->role == 2) {$user_id = 'manager_id';}else{$user_id = 'writter_id';}
         if($type=="current"||$type=="prev"){if($month>0){$month--;if($month==0){$year--;$month=12;}}}else{if($month<=12){$month++;if($month==13){$year++;$month=1;}}}
-        $archives=App\Task::select('id',DB::raw("SUM(MONTH(start_date) = $month AND YEAR(start_date) = $year AND process_status = 4 AND is_accepted = 1) AS assigned_task"),DB::raw("SUM(MONTH(end_date) = $month AND YEAR(end_date) = $year AND process_status = 4 AND is_accepted = 1) AS delivered_task"),DB::raw("(SELECT SUM(payments.writter_share) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.end_date) = $month AND YEAR(tasks.end_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_earning"),DB::raw("(SELECT SUM(payments.writter_penalty) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.submission_date) = $month AND YEAR(tasks.submission_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_penalty"))->get();
+        $archives=App\Task::select('id',DB::raw("SUM(MONTH(start_date) = $month AND YEAR(start_date) = $year AND process_status = 4 AND is_accepted = 1) AS assigned_task"),DB::raw("SUM(MONTH(end_date) = $month AND YEAR(end_date) = $year AND process_status = 4 AND is_accepted = 1) AS delivered_task"),DB::raw("(SELECT SUM(payments.writter_share) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.end_date) = $month AND YEAR(tasks.end_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.$user_id) AS total_earning"),DB::raw("(SELECT SUM(payments.writter_penalty) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.submission_date) = $month AND YEAR(tasks.submission_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.$user_id) AS total_penalty"))->get();
     @endphp
 
     <div class="box box-success">
@@ -126,8 +127,9 @@
     </div><!-- /.box -->
 
     @php
+        if(Auth::user()->role == 2) {$user_id = 'manager_id';}else{$user_id = 'writter_id';}
         if($type=="current"||$type=="prev"){if($month>0){$month--;if($month==0){$year--;$month=12;}}}else{if($month<=12){$month++;if($month==13){$year++;$month=1;}}}
-        $archives=App\Task::select('id',DB::raw("SUM(MONTH(start_date) = $month AND YEAR(start_date) = $year AND process_status = 4 AND is_accepted = 1) AS assigned_task"),DB::raw("SUM(MONTH(end_date) = $month AND YEAR(end_date) = $year AND process_status = 4 AND is_accepted = 1) AS delivered_task"),DB::raw("(SELECT SUM(payments.writter_share) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.end_date) = $month AND YEAR(tasks.end_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_earning"),DB::raw("(SELECT SUM(payments.writter_penalty) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.submission_date) = $month AND YEAR(tasks.submission_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.writter_id) AS total_penalty"))->get();
+        $archives=App\Task::select('id',DB::raw("SUM(MONTH(start_date) = $month AND YEAR(start_date) = $year AND process_status = 4 AND is_accepted = 1) AS assigned_task"),DB::raw("SUM(MONTH(end_date) = $month AND YEAR(end_date) = $year AND process_status = 4 AND is_accepted = 1) AS delivered_task"),DB::raw("(SELECT SUM(payments.writter_share) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.end_date) = $month AND YEAR(tasks.end_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.$user_id) AS total_earning"),DB::raw("(SELECT SUM(payments.writter_penalty) FROM tasks LEFT JOIN payments ON tasks.id = payments.task_id WHERE MONTH(tasks.submission_date) = $month AND YEAR(tasks.submission_date) = $year AND tasks.process_status = 4 AND tasks.is_accepted = 1 GROUP BY payments.$user_id) AS total_penalty"))->get();
     @endphp
 
     <div class="box box-danger">

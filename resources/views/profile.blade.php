@@ -30,7 +30,7 @@
                         <div class="profile-content">
                             <h3>About Me</h3>
                             <p>{{ $profile->about_me }}</p>
-                            
+
                             <h3>Professional Skills</h3>
                             <p>
                                 @php
@@ -40,7 +40,7 @@
                                     }
                                 @endphp
                             </p>
-                            
+
                             <h3>Basic Information</h3>
                             <div class="row">
                                 <div class="col-md-10 col-md-offset-1">
@@ -85,11 +85,12 @@
                                 </div>
                             </div>
                             <br><br>
-                        </div>    
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="col-md-6">
             <!-- Profile Form -->
             <div class="box box-success">
@@ -133,13 +134,17 @@
                             <input type="text" readonly="" class="form-control" value="{{ $profile->designation }}">
                         </div>
 
-                        <div class="form-group">
-                            @php
-                                $supervisor = App\User::find($profile->supervisor);
-                            @endphp
-                            <label>Supervisor</label>
-                            <input type="text" readonly="" class="form-control" value="{{ $supervisor->name }}">
-                        </div>
+                        @if($profile->role == 3)
+
+                            <div class="form-group">
+                                @php
+                                    $supervisor = App\User::find($profile->supervisor);
+                                @endphp
+                                <label>Supervisor</label>
+                                <input type="text" readonly="" class="form-control" value="{{ $supervisor->name }}">
+                            </div>
+
+                        @endif
 
                         <div class="form-group">
                             <label>Personal Website Link</label>
@@ -150,7 +155,7 @@
                             <label>About Me</label>
                             <textarea readonly="" name="about_me" class="form-control input-profile" rows="5">{{ $profile->about_me }}</textarea>
                         </div>
-                        
+
                         <div class="form-group">
                             <label>Skills <span class="text-danger">*add multiple skills with comma separator</span></label>
                             <input type="text" readonly="" name="skills" class="form-control input-profile" value="{{ $profile->skills }}">
@@ -224,7 +229,6 @@
                                 </div>
                             </div>
                         </div>
-                    
 
                         <div class="box-footer">
                             <button type="submit" class="btn btn-success">Update</button>
@@ -235,7 +239,9 @@
                 </div>
 
             </div><!-- /.box -->
+
         </div>
+
     </div>
 
 </section><!-- /.content -->
@@ -246,7 +252,7 @@
 
     <script type="text/javascript">
 
-        // function enableEdit() 
+        // function enableEdit()
         // {
         //     $(".input-profile").removeAttr("readonly");
         // }
