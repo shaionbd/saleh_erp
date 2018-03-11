@@ -17,6 +17,9 @@
 
         <!-- Styles -->
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/bootstrap.min.css') }}">
+
+        {{--  <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/plugins/fontawesome-5.0.6/web-fonts-with-css/css/fontawesome-all.min.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/plugins/fontawesome-5.0.6svg-with-js/css/fa-svg-with-js.css') }}">  --}}
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/font-awesome.min.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ URL::asset('public/css/notify.css') }}">
         @if (Auth::user())

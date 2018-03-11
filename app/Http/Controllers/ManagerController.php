@@ -16,6 +16,65 @@ use Illuminate\Support\Facades\Storage;
 
 class ManagerController extends Controller
 {
+  public function getPendingProject(Request $request){
+    $project_id = $request['project_id'];
+    $project_info = Projects::where('id', $project_id)->firstOrFail();
+    echo '
+          <h3 class="text-center">'.$project_info->name.'</h3>
+          <div class="progress">
+            <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width:10%">
+                10% complete
+            </div>
+          </div>
+          <div class="row">
+            <div class="task-info col-md-5">
+              <div class="row">
+                <div class="col-md-4">
+                  <p><strong>Tracing ID: </strong>'.$project_info->id.'</p>
+                  <p><strong>Project: </strong>'.$project_info->name.'</p>
+                </div>
+                <div class="col-md-4">
+                  <p><strong>Admin Assign Date: </strong>'.date("M d Y, h:i A", strtotime($project_info->start_date)).'</p>
+                  <p><strong>Submission Date: </strong>'.date("M d Y, h:i A", strtotime($project_info->end_date)).'</p>
+                </div>
+                <div class="col-md-4">
+                  <p><strong>Estimate Earning: </strong>  ৳'.$project_info->price.'</p>
+                  <p><strong>Word Count: </strong>'.$project_info->word_counts.'</p>
+                </div>
+              </div>
+              <p>
+                <strong>Admin Instruction: </strong>
+                <div class="well">
+                    <i>'.$project_info->description.'</i>
+                </div>
+              </p>
+            </div>
+            <div class="task-info col-md-7">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-inline">
+                    <div class="form-group">
+                      <label for="total_tasks" class="sr-only">Total Tasks</label>
+                      <input type="number" class="form-control" id="total_tasks" min="1" value="1">
+                    </div>
+                    <button type="button" onclick="createTasksView()" class="btn btn-primary">Create Tasks</button>
+                    <input type="hidden" id="project_id" name="project_id" value="'.$project_id.'" />
+                    <input type="hidden" id="item-create-url" value="'.url("/manager/create/item").'"/> 
+                    <input type="hidden" id="token" name="_token" value="'.csrf_token().'" />
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-md-12">
+                  <div id="task-create">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ';
+  }
   public function getProjects(){
     $data['title'] = "Projects";
     $data['active'] = "projects";
@@ -33,19 +92,40 @@ class ManagerController extends Controller
   }
 
   public function postCreateItem(Request $request){
-    $item = new Item();
-    $item->project_id = $request['project_id'];
-    $item->name = $request['name'];
-    $item->description = $request['description'];
-    $item->manager_id = Auth::user()->id;
-    $item->word_counts = $request['word_counts'];
-    $item->type = $request['type'];
-    $item->start_date = $request['start_date']. ' '. $request['start_time'];
-    $item->end_date = $request['end_date']. ' '. $request['end_time'];
-    $item->price = $request['price'];
-    $item->process_status = '1';
-    $item->save();
-    return redirect()->route('manager.projects');
+    $project_id = $request['project_id'];
+    $names = $request['name'];
+    $word_counts = $request['word_counts'];
+    $types = $request['type'];
+    $end_dates = $request['end_date'];
+    $end_times = $request['end_time'];
+    $prices = $request['price'];
+    $descriptions = $request['description'];
+
+    for($i=0; $i < sizeof($names); $i++){
+      $item = new Item();
+      $item->project_id = $project_id;
+      $item->name = $names[$i];
+      $item->description = $descriptions[$i];
+      $item->manager_id = Auth::user()->id;
+      $item->word_counts = $word_counts[$i];
+      $item->type = $types[$i];
+      $item->start_date = date("Y-m-d H:i:s");
+      $item->end_date = $end_dates[$i]. ' '. $end_times[$i];
+      $item->price = $prices[$i];
+      $item->process_status = '1';
+      $item->save();
+
+      $task = new Task();
+      $task->item_id = $item->id;
+      $task->manager_id = Auth::user()->id;
+      $task->word_counts = $word_counts[$i];
+      $task->save();
+    }
+    $project = Projects::where('id', $project_id)->first();
+    $project->complete_item = '1';
+    $project->save();
+
+    return redirect()->route('manager.tasks');
   }
 
   public function getTasks(){
@@ -57,6 +137,7 @@ class ManagerController extends Controller
       $data['writterPendingTasks'] = Task::where('process_status',0)->where('writter_id', '!=', '0')->get();
       $data['onGoingTasks'] = Task::where(['process_status' => 1, 'manager_id' => Auth::user()->id])->get();
       $data['submittedTasks'] = Task::where(['process_status'=> 4, 'is_accepted' => 0, 'manager_id' => Auth::user()->id])->get();
+      $data['projects'] = Projects::where(['manager_id' => Auth::user()->id, 'complete_item'=> 0])->get();
 
       return view('manager.tasks')->with($data);
   }
@@ -148,9 +229,11 @@ class ManagerController extends Controller
                 </div>
               </div>
               <p>
-                <strong>Admin Instruction: </strong>
+                <strong>Admin Instruction: 
+                <a href="'.asset('storage/app/public/tasks/'.$item_info->description_file).'" target="_black">'.$item_info->description_file .'</a>
+                </strong>
                 <div class="well">
-                    <i>'.$project_info->description.'</i>
+                    <i>'.$item_info->description.'</i>
                 </div>
               </p>
             </div>

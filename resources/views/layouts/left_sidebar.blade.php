@@ -36,7 +36,6 @@
       <li @if($active == 'profile') class="active" @endif><a href="{{ route('user.profile') }}"><i class="fa fa-user-o"></i> <span>Profile</span></a></li>
     @elseif(Auth::user()->role == 2)
       <!-- manager sidebar -->
-      <li @if($active == 'projects') class="active" @endif ><a href="{{ route('manager.projects') }}"><i class="fa fa-tasks"></i> <span>Projects</span></a></li>
       <li @if($active == 'tasks') class="active" @endif ><a href="{{ route('manager.tasks') }}"><i class="fa fa-tasks"></i> <span>Tasks</span></a></li>
       <li @if($active == 'archives') class="active" @endif ><a href="{{ route('user.archive', 'current') }}"><i class="fa fa-archive"></i> <span>Archive</span></a></li>
       <li @if($active == 'payments') class="active" @endif><a href="{{ route('user.payment') }}"><i class="fa fa-money"></i> <span>Payment</span></a></li>
@@ -47,11 +46,10 @@
           <li><a href="{{ route('user.managerTeam') }}"><i class="fa fa-angle-right"></i> My Team</a></li>
         </ul>
       </li>
-
-    <!-- manager sidebar -->
+    <!-- /manager sidebar -->
     @elseif(Auth::user()->role == 1)
-
     <!-- admin sidebar -->
+    <li @if($active == 'tasks') class="active" @endif ><a href="{{ route('admin.tasks') }}"><i class="fa fa-tasks"></i> <span>Tasks</span></a></li>
 
     @elseif(Auth::user()->role == 4)
       <!-- redirect to client home page -->

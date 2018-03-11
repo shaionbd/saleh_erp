@@ -27,9 +27,9 @@
             <div class="box-body">
               <table class="table table-bordered ">
                 <tr>
-                  <th width="33%" class="text-center">Pending Items</th>
-                  <th width="33%" class="text-center">Assign Task</th>
-                  <th width="33%" class="text-center">Writter Pending Tasks</th>
+                  <th width="33%" class="text-center">Pending Orders</th>
+                  <th width="33%" class="text-center">Assign Orders</th>
+                  <th width="33%" class="text-center">Writter Pending Orders</th>
                 </tr>
 
                 <tr>
@@ -38,7 +38,7 @@
                       <div class="box box-solid bg-green-gradient">
                         <div class="box-header">
 
-                            <div class="col-md-8 item" style="background: transparent"  data-itemid="{{ $pendingItem->id }}" data-itemtype="pending" data-url="{{ route('item.pending') }}">
+                            <div class="col-md-8 item"  data-itemid="{{ $pendingItem->id }}" data-itemtype="pending" data-url="{{ route('item.pending') }}">
                               <div class="row">
                                 <div class="col-md-2">
                                   <i class="fa fa-tasks fa-2x"></i>
@@ -53,20 +53,41 @@
                             <div class="col-md-4">
                               <!-- tools box -->
                               <div class="pull-right box-tools">
-                                <!-- button with a dropdown -->
-                                <form action="{{ route('manager.pending_status_change') }}" method="post">
-                                  <input type="hidden" name="item_id" value="{{ $pendingItem->id }}">
-                                  <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                  <button type="submit" data-toggle="tooltip" title="accept" class="btn btn-success btn-sm" name="accept" value="accept"><i class="fa fa-check"></i></button>
-                                  <button type="submit" data-toggle="tooltip" title="decline" class="btn btn-danger btn-sm" name="decline" value="decline"><i class="fa fa-times"></i></button>
-                                  {{ csrf_field() }}
-                                </form>
+                                <a href="javascript:void()" class="item btn btn-success btn-xs" data-itemid="{{ $pendingItem->id }}" data-itemtype="pending" data-url="{{ route('item.pending') }}"><i class="fa fa-arrow-right"></i></a>
                               </div><!-- /. tools -->
                             </div>
 
                         </div><!-- /.box-header -->
                       </div>
-                  	@endforeach
+                    @endforeach
+                    
+                    @foreach($projects as $project)
+                      <div class="box box-solid bg-yellow-gradient">
+                        <div class="box-header">
+
+                            <div class="col-md-8 project" style="background: transparent"  data-projectid="{{ $project->id }}" data-projecttype="pending" data-url="{{ route('project.pending') }}">
+                              <div class="row">
+                                <div class="col-md-2">
+                                  <i class="fa fa-product-hunt fa-2x"></i>
+                                </div>
+                                <div class="col-md-10">
+                                  <h3 class="box-title">
+                                    <b>{{ $project->name }}</b>
+                                  </h3>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <!-- tools box -->
+                              <div class="pull-right box-tools">
+                                <!-- button with a dropdown -->
+                                <a href="javascript:void()" class="project btn btn-warning btn-xs" data-itemid="{{ $project->id }}" data-itemtype="pending" data-url="{{ route('project.pending') }}"><i class="fa fa-arrow-right"></i></a>
+                              </div><!-- /. tools -->
+                            </div>
+
+                        </div><!-- /.box-header -->
+                      </div>
+                    @endforeach
                   </td>
                   <td>
                     @foreach($assignTasks as $assignTask)
@@ -181,9 +202,9 @@
 
               <table class="table table-bordered">
                 <tr>
-                  <th width="33%" class="text-center">OnGoing Tasks</th>
-                  <th width="33%" class="text-center">Writter Submitted Tasks</th>
-                  <th width="33%" class="text-center">Admin Submitted Tasks</th>
+                  <th width="33%" class="text-center">OnGoing Orders</th>
+                  <th width="33%" class="text-center">Waiting Approval(Under Checking)</th>
+                  <th width="33%" class="text-center">Submitted Tasks</th>
                 </tr>
 
                 <tr>
